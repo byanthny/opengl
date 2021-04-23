@@ -1,5 +1,10 @@
-# opengl
-My attempt at learning opengl.
-Will work on an OpenGL and Metal rendering engine in the future, maybe game engine also?
+# OpenGL
 
+My attempt at learning OpenGL.
 Based on: https://learnopengl.com
+
+## Updates
+- Inital Setup
+
+## Future 
+OpenGL and Metal rendering engine, maybe game engine also?
