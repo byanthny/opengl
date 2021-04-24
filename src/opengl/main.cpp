@@ -27,8 +27,8 @@ int main(void)
     
     std::cout << glGetString(GL_VERSION) << std::endl;
     
-    //define triangle points
-    float positions[6] = {
+    //Define triangle vertices
+    float vertices[6] = {
         -0.5f, -0.5f,
          0.0f,  0.5f,
          0.5f, -0.5f
@@ -37,8 +37,15 @@ int main(void)
     //Create a vertex buffer
     unsigned int buffer;
     glGenBuffers(1, &buffer);
+    //What kind of buffer?
     glBindBuffer(GL_ARRAY_BUFFER, buffer);
-    glBufferData(GL_ARRAY_BUFFER, 6*sizeof(float), positions, GL_STATIC_DRAW);
+    //Enable Vertex Atrrib
+    glEnableVertexAttribArray(0);
+    //Define what's in the buffer. Howe are the vertices set up: 2d, 3d, with texture data?, etc.....
+    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float)*2, 0);
+    //Add data to buffer
+    glBufferData(GL_ARRAY_BUFFER, 6*sizeof(float), vertices, GL_STATIC_DRAW);
+    
     
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
