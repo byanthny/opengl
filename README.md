@@ -8,6 +8,6 @@ My attempt at learning OpenGL.
 ### Future 
 OpenGL and Metal rendering engine, maybe game engine also?
 
-##References
+## References
 - https://learnopengl.com
 - http://docs.gl
