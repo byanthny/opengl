@@ -114,9 +114,9 @@ int main(void)
     
     //Create a vertex buffer
     unsigned int buffer, vabuffer;
-    glGenVertexArrays(1, &vabuffer);
+    glGenVertexArrays(1, &vabuffer); //Fixed black screen, what does it actually do?
     glGenBuffers(1, &buffer);
-    glBindVertexArray(vabuffer);
+    glBindVertexArray(vabuffer); //Fixed black screen, what does it actually do?
     //What kind of buffer?
     glBindBuffer(GL_ARRAY_BUFFER, buffer);
     //Add data to buffer
@@ -159,7 +159,6 @@ int main(void)
         glClear(GL_COLOR_BUFFER_BIT);
         
         //Draw buffer
-        glBindVertexArray(vabuffer);
         glDrawArrays(GL_TRIANGLES, 0, 3);
         
         /* Swap front and back buffers */
