@@ -2,6 +2,43 @@
 #include <GLFW/glfw3.h>
 
 #include <iostream>
+#include <fstream>
+#include <sstream>
+
+struct Shaders
+{
+    std::string vertex;
+    std::string fragment;
+};
+
+//Parse combined shader file into fragment and vertex shader strings.
+static Shaders parseShader(const std::string& filepath) {
+    std::ifstream stream(filepath); //TODO Replace fstream reading can be slow
+    
+    enum class ShaderType {
+        NONE = -1, VERTEX = 0, FRAGMENT = 1
+    };
+    
+    std::string line;
+    std::stringstream ss[2];
+    ShaderType type = ShaderType::NONE;
+        
+    while (getline(stream, line)) {
+        if(line.find("shader") != std::string::npos) {
+            if (line.find("#vertex") != std::string::npos) { //vertex shader found
+                type = ShaderType::VERTEX;
+            } else if  (line.find("#fragment") != std::string::npos) { //fragment shader found
+                type = ShaderType::FRAGMENT;
+            }
+        }
+        else {
+            ss[(int)type] << line << '\n';
+        }
+    }
+    
+    return {ss[0].str(), ss[1].str()};
+    
+}
 
 //Create and compile a shader (ie. vertext shader, fragment shader, etc...)
 static unsigned int compileShader(const std::string& source, unsigned int type) {
@@ -126,25 +163,12 @@ int main(void)
     //Enable Vertex Atrrib
     glEnableVertexAttribArray(0);
 
+    Shaders source = parseShader("res/shaders/basic.shader");
     
-    //Create Shaders
-    std::string vertexShader =
-        "#version 330 core\
-        layout(location = 0) in vec4 position;\
-        void main()\
-        {\
-            gl_Position = position;\
-        }";
+    //std::cout << source.vertex << std::endl;
+    //std::cout << source.fragment << std::endl;
     
-    std::string fragmentShader =
-        "#version 330 core\
-        out vec4 color;\
-        void main()\
-        {\
-            color = vec4(1.0, 0.0, 0.0, 1.0);\
-        }";
-    
-    unsigned int shader = createShader(vertexShader, fragmentShader);
+    unsigned int shader = createShader(source.vertex, source.fragment);
     glUseProgram(shader);
     
     
@@ -155,7 +179,7 @@ int main(void)
         processInput(window);
         
         /* Render here */
-        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+        //glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
         
         //Draw buffer
@@ -168,8 +192,7 @@ int main(void)
         glfwPollEvents();
     }
 
-
-    
+    //glDeleteProgram(shader);
     glfwTerminate();
     return 0;
 }
