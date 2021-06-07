@@ -144,13 +144,16 @@ int main(void)
     
     //Define triangle vertices
     float vertices[] = {
-        -0.5f, -0.5f,
-         0.5f, -0.5f,
-         0.5f,  0.5f,
-        
-         0.5f,  0.5f,
-        -0.5f,  0.5f,
-        -0.5f, -0.5f
+        -0.5f, -0.5f, //0
+         0.5f, -0.5f, //1
+         0.5f,  0.5f, //2
+        -0.5f,  0.5f, //3
+    };
+    
+    //used for index buffer, using vertices above
+    unsigned int indices[] = {
+        0, 1, 2,
+        2, 3, 0
     };
     
     //Create a vertex buffer
@@ -166,6 +169,11 @@ int main(void)
     glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float)*2, 0);
     //Enable Vertex Atrrib
     glEnableVertexAttribArray(0);
+    
+    unsigned int indexBuffer; //can be unsigned char, short, etc, char will only have 255 indices.
+    glGenBuffers(1, &indexBuffer);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, 6*sizeof(unsigned int), indices, GL_STATIC_DRAW);
 
     Shaders source = parseShader("res/shaders/basic.shader");
     
@@ -187,7 +195,7 @@ int main(void)
         glClear(GL_COLOR_BUFFER_BIT);
         
         //Draw buffer
-        glDrawArrays(GL_TRIANGLES, 0, 6);
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
         
         /* Swap front and back buffers */
         glfwSwapBuffers(window);
