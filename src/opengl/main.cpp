@@ -143,10 +143,14 @@ int main(void)
     std::cout << glGetString(GL_VERSION) << std::endl;
     
     //Define triangle vertices
-    float vertices[6] = {
+    float vertices[] = {
         -0.5f, -0.5f,
-         0.0f,  0.5f,
-         0.5f, -0.5f
+         0.5f, -0.5f,
+         0.5f,  0.5f,
+        
+         0.5f,  0.5f,
+        -0.5f,  0.5f,
+        -0.5f, -0.5f
     };
     
     //Create a vertex buffer
@@ -157,7 +161,7 @@ int main(void)
     //What kind of buffer?
     glBindBuffer(GL_ARRAY_BUFFER, buffer);
     //Add data to buffer
-    glBufferData(GL_ARRAY_BUFFER, 6*sizeof(float), vertices, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, 2*6*sizeof(float), vertices, GL_STATIC_DRAW);
     //Define what's in the buffer. Howe are the vertices set up: 2d, 3d, with texture data?, etc.....
     glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float)*2, 0);
     //Enable Vertex Atrrib
@@ -183,7 +187,7 @@ int main(void)
         glClear(GL_COLOR_BUFFER_BIT);
         
         //Draw buffer
-        glDrawArrays(GL_TRIANGLES, 0, 3);
+        glDrawArrays(GL_TRIANGLES, 0, 6);
         
         /* Swap front and back buffers */
         glfwSwapBuffers(window);
