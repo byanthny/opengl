@@ -4,7 +4,28 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <signal.h>
 
+#define ASSERT(x) if(!(x)) raise(SIGINT);
+#define Call(x) ClearErrors();\
+    x;\
+ASSERT(LogCall(#x, __FILE__, __LINE__))
+
+//Clear openGL errors
+static void ClearErrors () {
+    while(glGetError()!= GL_NO_ERROR);
+}
+
+//Print openGL errors
+static bool LogCall (const char* function, const char* file, int line) {
+    while(GLenum error = glGetError()) {
+        std::cout << "ERROR: " <<"line " << line << " (" << function << ") " << error << " : " << file << std::endl;
+        return false;
+    }
+    return true;
+}
+
+//Struct to hold shaders.
 struct Shaders
 {
     std::string vertex;
@@ -195,6 +216,7 @@ int main(void)
         glClear(GL_COLOR_BUFFER_BIT);
         
         //Draw buffer
+        //Call(glDrawElements(GL_TRIANGLES, 6, GL_INT, nullptr));
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
         
         /* Swap front and back buffers */
