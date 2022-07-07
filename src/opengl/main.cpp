@@ -7,13 +7,13 @@
 #include <signal.h>
 
 #define ASSERT(x) if(!(x)) raise(SIGINT);
-#define Call(x) ClearErrors();\
+#define GLCall(x) ClearErrors();\
     x;\
 ASSERT(LogCall(#x, __FILE__, __LINE__))
 
 //Clear openGL errors
 static void ClearErrors () {
-    while(glGetError()!= GL_NO_ERROR);
+    while(!glGetError());
 }
 
 //Print openGL errors
@@ -180,7 +180,7 @@ int main(void)
     //Create a vertex buffer
     unsigned int buffer, vabuffer;
     glGenVertexArrays(1, &vabuffer); //Fixed black screen, what does it actually do?
-    glGenBuffers(1, &buffer);
+    glGenBuffers(1, &buffer); //create buffer return "id"
     glBindVertexArray(vabuffer); //Fixed black screen, what does it actually do?
     //What kind of buffer?
     glBindBuffer(GL_ARRAY_BUFFER, buffer);
@@ -226,7 +226,8 @@ int main(void)
         glfwPollEvents();
     }
 
-    //glDeleteProgram(shader);
+    glDeleteProgram(shader);
+    
     glfwTerminate();
     return 0;
 }
