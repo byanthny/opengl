@@ -152,6 +152,8 @@ int main(void)
     /* Make the window's context current */
     glfwMakeContextCurrent(window);
     
+    glfwSwapInterval(1); //vsync
+    
     //Set Viewport for window
     glViewport(0, 0, 800, 600);
     
@@ -197,13 +199,17 @@ int main(void)
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, 6*sizeof(unsigned int), indices, GL_STATIC_DRAW);
 
     Shaders source = parseShader("res/shaders/basic.shader");
-    
-    //std::cout << source.vertex << std::endl;
-    //std::cout << source.fragment << std::endl;
-    
     unsigned int shader = createShader(source.vertex, source.fragment);
     glUseProgram(shader);
     
+    //Get uniform uColor location
+    int location = glGetUniformLocation(shader, "uColor");
+    ASSERT(location != -1); //uniform not found
+    
+    // Color Changing!!
+    float r = 0.0f;
+    float t = 1.0f;
+    float increment = 0.02f;
     
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
@@ -215,8 +221,18 @@ int main(void)
         //glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
         
+        //Draw pixel color
+        glUniform4f(location, r, 0.0f, t, 1.0f);
+        
+        if (r  > 1.0f)
+            increment = -0.02f;
+        else if (r < 0.0f)
+            increment = 0.05f;
+        
+        r+=increment;
+        t-=increment;
+        
         //Draw buffer
-        //Call(glDrawElements(GL_TRIANGLES, 6, GL_INT, nullptr));
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
         
         /* Swap front and back buffers */
