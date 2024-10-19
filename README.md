@@ -1,4 +1,5 @@
 # OpenGL
+**restarting project files creating to many issues on new devices & i forgot where I was**
 
 My attempt at learning OpenGL.
 
